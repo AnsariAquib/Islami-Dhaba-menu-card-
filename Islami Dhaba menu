@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Islami Dhaba Menu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: #f0f0f0;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #FFD700;
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .logo {
+            width: 120px;
+            margin: 20px auto;
+            border-radius: 50%;
+            border: 2px solid #FFD700;
+        }
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        .menu-item {
+            background-color: #444;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+            color: #FFD700;
+        }
+        .menu-item:hover {
+            transform: scale(1.05);
+        }
+        .price {
+            color: #FF5733;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #FFD700;
+        }
+        .date-time {
+            color: #FFD700;
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+        input[type="text"], input[type="password"] {
+            margin: 10px 0;
+            padding: 10px;
+            width: calc(90% - 20px);
+            border: 2px solid #FFD700;
+            border-radius: 5px;
+            font-size: 1.2em;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 1.2em;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <img src="logo.png" alt="Hotel Logo" class="logo">
+    <h1>Hotel Islami Dhaba</h1>
+    <p class="date-time">Date: <span id="date"></span></p>
+    <p class="date-time">Time: <span id="time"></span></p>
+
+    <div class="menu-container" id="menu">
+        <div class="menu-item" data-price="80">Ghost <span class="price">₹80</span> <button onclick="toggleItem(this)">Hide</button> <button onclick="changePrice(this)">Change Price</button></div>
+        <div class="menu-item" data-price="80">Keema <span class="price">₹80</span> <button onclick="toggleItem(this)">Hide</button> <button onclick="changePrice(this)">Change Price</button></div>
+        <div class="menu-item" data-price="80">Kaleji <span class="price">₹80</span> <button onclick="toggleItem(this)">Hide</button> <button onclick="changePrice(this)">Change Price</button></div>
+        <div class="menu-item" data-price="80">Paya <span class="price">₹80</span> <button onclick="toggleItem(this)">Hide</button> <button onclick="changePrice(this)">Change Price</button></div>
+        <div class="menu-item" data-price="80">Chicken <span class="price">₹80</span> <button onclick="toggleItem(this)">Hide</button> <button onclick="changePrice(this)">Change Price</button></div>
+        <div class="menu-item" data-price="10">Papad <span class="price">₹10</span> <button onclick="toggleItem(this)">Hide</button> <button onclick="changePrice(this)">Change Price</button></div>
+    </div>
+
+    <h3>Add New Item</h3>
+    <input type="text" id="newItemEng" placeholder="Dish Name (English)">
+    <input type="text" id="newItemHindi" placeholder="Dish Name (Hindi)">
+    <input type="text" id="newPrice" placeholder="Price (in ₹)">
+    <input type="password" id="ownerPassword" placeholder="Owner Password">
+    <button onclick="addItem()">Add Item</button>
+
+    <p class="footer">Thank You for Visiting!</p>
+
+    <script>
+        // Function to update Date and Time every second
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('date').innerText = now.toLocaleDateString();
+            document.getElementById('time').innerText = now.toLocaleTimeString();
+        }
+        
+        // Call updateDateTime every second
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // Function to toggle visibility of an item
+        function toggleItem(button) {
+            const item = button.parentElement;
+            item.classList.toggle('hidden');
+            button.innerText = item.classList.contains('hidden') ? 'Unhide' : 'Hide';
+        }
+
+        // Function to change the price of an item
+        function changePrice(button) {
+            const item = button.parentElement;
+            const currentPrice = item.getAttribute('data-price');
+            const newPrice = prompt(`Current Price is ₹${currentPrice}. Enter new price:`);
+            if (newPrice !== null && !isNaN(newPrice) && newPrice > 0) {
+                item.setAttribute('data-price', newPrice);
+                item.querySelector('.price').innerText = `₹${newPrice}`;
+            } else {
+                alert("Invalid price entered. Please try again.");
+            }
+        }
+
+        // Function to Add New Item with Owner Permission
+        function addItem() {
+            const itemNameEng = document.getElementById('newItemEng').value;
+            const itemNameHindi = document.getElementById('newItemHindi').value;
+            const itemPrice = document.getElementById('newPrice').value;
+            const ownerPassword = document.getElementById('ownerPassword').value;
+            const correctPassword = "owner123"; // islamidhaba
+
+            if (ownerPassword === correctPassword) {
+                if (itemNameEng && itemNameHindi && itemPrice) {
+                    const menu = document.getElementById('menu');
+                    const newDiv = document.createElement('div');
+                    newDiv.className = 'menu-item';
+                    newDiv.setAttribute('data-price', itemPrice);
+                    newDiv.innerHTML = `${itemNameEng} / ${itemNameHindi} <span class="price">₹${itemPrice}</span> <button onclick="toggleItem(this)">Hide</button> <button onclick="changePrice(this)">Change Price</button>`;
+                    menu.appendChild(newDiv);
+                    document.getElementById('newItemEng').value = '';
+                    document.getElementById('newItemHindi').value = '';
+                    document.getElementById('newPrice').value = '';
+                    document.getElementById('ownerPassword').value = '';
+                } else {
+                    alert("Please enter the dish name in both languages and price.");
+                }
+            } else {
+                alert("Incorrect password! You do not have permission to add items.");
+            }
+        }
+    </script>
+</body>
+</html>
